@@ -106,8 +106,7 @@ def TestRunner(folder_name, file_glob, solve, testdata, description, debug):
                     self.fig.canvas.draw()
 
             def show(self, data, debug, title, cmap):
-                # self.frames.append((data, title, debug, cmap))
-                pass
+                self.frames.append((data, title, debug, cmap))
 
             def finish(self):
                 self.fig, self.ax = plt.subplots()
