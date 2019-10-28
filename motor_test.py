@@ -78,6 +78,7 @@ def menu():
         choice = input()
         try:
             direction, duration = choice.split()
+            duration = int(duration)
             drive(direction, duration)
         except ValueError:
             if choice is 'q':
