@@ -1,53 +1,91 @@
-#!/usr/bin/env python
-
-# Import required modules
+import config
 import time
 import RPi.GPIO as GPIO
 
-# Declare the GPIO settings
-GPIO.setmode(GPIO.BOARD)
+def setup_motors():
+    # Declare the GPIO settings
+    GPIO.setmode(GPIO.BOARD)
+    # Set GPIO pins
+    GPIO.setup(config.RL1, GPIO.OUT)
+    GPIO.setup(config.RL2, GPIO.OUT)
+    GPIO.setup(config.RL3, GPIO.OUT)
+    GPIO.setup(config.RL4, GPIO.OUT)
+    return
 
-# set up GPIO pins
-GPIO.setup(11, GPIO.OUT) # Connected to RL1
-GPIO.setup(12, GPIO.OUT) # Connected to RL2
-GPIO.setup(15, GPIO.OUT) # Connected to RL3
-GPIO.setup(16, GPIO.OUT) # Connected to RL4
+def reset_all_to_low():
+    # Reset all the GPIO pins by setting them to LOW
+    GPIO.output(config.RL1, GPIO.LOW)
+    GPIO.output(config.RL2, GPIO.LOW)
+    GPIO.output(config.RL3, GPIO.LOW)
+    GPIO.output(config.RL4, GPIO.LOW)
+    return
 
-# Drive the motor BW
-# Motor A:
-GPIO.output(11, GPIO.HIGH) # Set RL1
-GPIO.output(12, GPIO.LOW) # Set RL2
-# Motor B:
-GPIO.output(15, GPIO.HIGH) # Set RL3
-GPIO.output(16, GPIO.LOW) # Set RL4
+def drive(direction, duration=1):
+    if direction is 'f':
+        # Drive the motor FW
+        # Motor A:
+        GPIO.output(config.RL1, GPIO.HIGH)
+        GPIO.output(config.RL2, GPIO.LOW)
+        # Motor B:
+        GPIO.output(config.RL3, GPIO.HIGH)
+        GPIO.output(config.RL4, GPIO.LOW)
+        # Go FW for duration
+        time.sleep(duration)
+    elif direction is 'b':
+        # Drive the motor BW
+        # Motor A:
+        GPIO.output(config.RL1, GPIO.LOW)
+        GPIO.output(config.RL2, GPIO.HIGH)
+        # Motor B:
+        GPIO.output(config.RL3, GPIO.LOW)
+        GPIO.output(config.RL4, GPIO.HIGH)
+        # Go BW for duration
+        time.sleep(duration)
+    elif direction is 'l':
+        # Turn left
+        # Motor A:
+        GPIO.output(config.RL1, GPIO.LOW)
+        GPIO.output(config.RL2, GPIO.HIGH)
+        # Motor B:
+        GPIO.output(config.RL3, GPIO.HIGH)
+        GPIO.output(config.RL4, GPIO.LOW)
+    elif direction is 'r':
+        # Turn right
+        # Motor A:
+        GPIO.output(config.RL1, GPIO.HIGH)
+        GPIO.output(config.RL2, GPIO.LOW)
+        # Motor B:
+        GPIO.output(config.RL3, GPIO.LOW)
+        GPIO.output(config.RL4, GPIO.HIGH)
 
-# Wait 5 seconds
-time.sleep(5)
+    time.sleep(duration)
+    reset_all_to_low()
+    return
 
-# Drive the motor FW
-# Motor A:
-GPIO.output(11, GPIO.LOW) # Set RL1
-GPIO.output(12, GPIO.HIGH) # Set RL2
-# Motor B:
-GPIO.output(15, GPIO.LOW) # Set RL3
-GPIO.output(16, GPIO.HIGH) # Set RL4
+def menu():
+    main_menu = ['q to quit',
+                'f to go FW',
+                'b to go BW',
+                'l to turn left',
+                'r to turn right']
+    while True:
+        print("\tMOTOR TEST MENU")
+        print("enter direction and duration (defaults to 1 sec)")
+        for option in main_menu:
+            print(option)
+        print("Example:f, f 2, l 0.5 etc. ")
 
-# Wait 5 seconds
-time.sleep(5)
+        choice = input()
+        try:
+            direction, duration = choice.split()
+            drive(direction, duration)
+        except ValueError:
+            if choice is 'q':
+                return
+            else:
+                drive(choice)
+    return
 
-# Drive the motor CCW
-# Motor A:
-GPIO.output(11, GPIO.HIGH) # Set RL1
-GPIO.output(12, GPIO.LOW) # Set RL2
-# Motor B:
-GPIO.output(15, GPIO.LOW) # Set RL3
-GPIO.output(16, GPIO.HIGH) # Set RL4
-
-# Wait 5 seconds
-time.sleep(5)
-
-# Reset all the GPIO pins by setting them to LOW
-GPIO.output(12, GPIO.LOW) # Set AIN1
-GPIO.output(11, GPIO.LOW) # Set AIN2
-GPIO.output(15, GPIO.LOW) # Set BIN1
-GPIO.output(16, GPIO.LOW) # Set BIN2
+if __name__ == "__main__":
+    setup_motors()
+    menu()
