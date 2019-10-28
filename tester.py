@@ -17,4 +17,5 @@ if __name__ == "__main__":
             import motor_test
             if not motor_setup_done:
                 motor_test.setup_motors()
+		motor_setup_done = True
             motor_test.menu()
