@@ -3,5 +3,7 @@ RL2 = 12
 RL3 = 15
 RL4 = 16
 
-MQTT_SERVER = "192.168.43.142"
-MQTT_PATH = "test_channel"
+MQTT_SERVER = "localhost"
+MQTT_CHANNEL = "rpi/"
+MQTT_CHANNEL_GET = MQTT_CHANNEL + "get/"
+MQTT_CHANNEL_PUT = MQTT_CHANNEL + "put/"
