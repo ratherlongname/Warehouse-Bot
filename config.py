@@ -2,3 +2,6 @@ RL1 = 11
 RL2 = 12
 RL3 = 15
 RL4 = 16
+
+MQTT_SERVER = "192.168.43.142"
+MQTT_PATH = "test_channel"
