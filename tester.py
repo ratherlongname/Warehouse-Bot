@@ -1,7 +1,11 @@
 import config
 
 if __name__ == "__main__":
-    main_menu = ['q to quit', 'm to test motors', 'r to become rpi', 's to become server']
+    main_menu = ['q to quit',
+                'm to test motors',
+                'r to become rpi',
+                's to become server',
+                'g to test routing']
     motor_setup_done = False
     while True:
         print("\tMAIN MENU")
@@ -28,3 +32,7 @@ if __name__ == "__main__":
         elif choice is 's':
             import mqtt_server
             mqtt_server.menu()
+
+        elif choice is 'g':
+            import a_star_test
+            a_star_test.menu()
