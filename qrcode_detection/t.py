@@ -1,11 +1,23 @@
 from test_framework import TestRunner as tr
 import cv2, math, sys
 import numpy as np
+import paho.mqtt.publish as publish
 import pyzbar.pyzbar as pyzbar
+MQTT_SERVER = "localhost"
+MQTT_CHANNEL = "rpi/"
+MQTT_CHANNEL_GET = MQTT_CHANNEL + "get/"
+MQTT_CHANNEL_PUT = MQTT_CHANNEL + "put/"
+
 def euclidean_distance(p1, p2):
     #! WARNING: Returns square of actual euclidean distance
     return ((p1[1] - p2[1]) ** 2 + (p1[0] - p2[0]) ** 2)
-    
+
+def send_message(msg, uid):
+    channel = MQTT_CHANNEL_GET + uid
+    print("Sending message: {} to channel {}".format(msg, channel))
+    publish.single(channel, msg, hostname=MQTT_SERVER)
+    return
+
 def normal_distance(p1, p2, p3):
     p1 = np.array(p1)
     p2 = np.array(p2)
@@ -97,6 +109,7 @@ def solve(data, desc):
     pp(slope, i='slope')
     pp(dy, i='dy')
     pp(dx, i='dx')
+    send_message(f"{deg}+{center[0]}+{center[1]}", "rpi_test_1")
 
 
 show, pp, test, _ = tr("test_images", "qr_0*.png", solve, testdata, desc, True)
