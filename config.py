@@ -5,6 +5,8 @@ RL4 = 16
 
 ECHO = 24
 TRIGGER = 18
+MIN_DIST = 5 # in cm
+DIST_CHECK_DELAY = 1 # in sec
 
 MQTT_SERVER = "localhost"
 MQTT_CHANNEL = "rpi/"
