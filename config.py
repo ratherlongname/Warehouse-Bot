@@ -3,6 +3,9 @@ RL2 = 12
 RL3 = 15
 RL4 = 16
 
+ECHO = 24
+TRIGGER = 18
+
 MQTT_SERVER = "localhost"
 MQTT_CHANNEL = "rpi/"
 MQTT_CHANNEL_GET = MQTT_CHANNEL + "get/"

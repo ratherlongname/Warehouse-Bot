@@ -5,7 +5,8 @@ if __name__ == "__main__":
                 'm to test motors',
                 'r to become rpi',
                 's to become server',
-                'g to test routing']
+                'g to test routing',
+                'p to test ping sensor']
     while True:
         print("\tMAIN MENU")
         for option in main_menu:
@@ -32,3 +33,6 @@ if __name__ == "__main__":
         elif choice is 'g':
             import routing
             routing.menu()
+        elif choice is 'p':
+            import ping
+            ping.menu()
