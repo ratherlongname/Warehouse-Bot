@@ -60,39 +60,42 @@ def drive(direction, duration):
     return
 
 def menu():
-    main_menu = ['q to quit',
-                'f to go FW',
-                'b to go BW',
-                'l to turn left',
-                'r to turn right',
-                's to stop']
-    while True:
-        print("\tMOTOR TEST MENU")
-        print("enter direction and duration (optional)")
-        for option in main_menu:
-            print(option)
-        print("Example:f (start going fw), f 2 (go fw for 2 sec), l 0.5 (turn left for 0.5 sec), s (stop moving) etc. ")
+    try:    
+        main_menu = ['q to quit',
+                    'f to go FW',
+                    'b to go BW',
+                    'l to turn left',
+                    'r to turn right',
+                    's to stop']
+        setup_motors()
+        while True:
+            print("\tMOTOR TEST MENU")
+            print("enter direction and duration (optional)")
+            for option in main_menu:
+                print(option)
+            print("Example:f (start going fw), f 2 (go fw for 2 sec), l 0.5 (turn left for 0.5 sec), s (stop moving) etc. ")
 
-        choice = input()
-        try:
-            direction, duration = choice.split()
-            duration = int(duration)
-            drive(direction, duration)
-        except ValueError:
-            if choice is 'q':
-                return
-            elif choice is 'f':
-                start_fw()
-            elif choice is 'b':
-                start_bw()
-            elif choice is 'l':
-                start_left()
-            elif choice is 'r':
-                start_right()
-            elif choice is 's':
-                stop()
+            choice = input()
+            try:
+                direction, duration = choice.split()
+                duration = int(duration)
+                drive(direction, duration)
+            except ValueError:
+                if choice is 'q':
+                    return
+                elif choice is 'f':
+                    start_fw()
+                elif choice is 'b':
+                    start_bw()
+                elif choice is 'l':
+                    start_left()
+                elif choice is 'r':
+                    start_right()
+                elif choice is 's':
+                    stop()
+    finally:
+        GPIO.cleanup()
     return
 
 if __name__ == "__main__":
-    setup_motors()
     menu()

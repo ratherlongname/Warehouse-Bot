@@ -6,7 +6,6 @@ if __name__ == "__main__":
                 'r to become rpi',
                 's to become server',
                 'g to test routing']
-    motor_setup_done = False
     while True:
         print("\tMAIN MENU")
         for option in main_menu:
@@ -20,9 +19,6 @@ if __name__ == "__main__":
         
         elif choice is 'm':
             import motor_test
-            if not motor_setup_done:
-                motor_test.setup_motors()
-                motor_setup_done = True
             motor_test.menu()
         
         elif choice is 'r':
