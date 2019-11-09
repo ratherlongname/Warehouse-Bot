@@ -19,8 +19,8 @@ if __name__ == "__main__":
             exit()
         
         elif choice is 'm':
-            import motor_test
-            motor_test.menu()
+            import motor
+            motor.menu()
         
         elif choice is 'r':
             import mqtt_rpi
