@@ -30,5 +30,5 @@ if __name__ == "__main__":
             mqtt_server.menu()
 
         elif choice is 'g':
-            import a_star_test
-            a_star_test.menu()
+            import routing
+            routing.menu()
