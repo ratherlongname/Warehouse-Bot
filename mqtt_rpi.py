@@ -56,7 +56,7 @@ def menu():
             return
         elif choice is 'p':
             msg = input("Enter message:\n")
-            send_message(msg, config.uid)
+            send_message(msg)
     return
 
 if __name__ == "__main__":
