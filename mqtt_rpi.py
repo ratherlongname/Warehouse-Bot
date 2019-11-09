@@ -5,7 +5,7 @@ import uuid
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe(config.MQTT_CHANNEL_PUT + uid)
+    client.subscribe(config.MQTT_CHANNEL_PUT + config.uid)
     return
 
 def on_message(client, userdata, msg):
@@ -13,8 +13,12 @@ def on_message(client, userdata, msg):
     return
 
 client = mqtt.Client()
-uid = uuid.uuid1().hex
-print("Our UID is: ", uid)
+
+def generate_uid():
+    uid = uuid.uuid1().hex
+    config.uid = uid
+    print("Our UID is: ", config.uid)
+    return
 
 def start_server():
     client.on_connect = on_connect
@@ -38,6 +42,7 @@ def menu():
     main_menu = ['q to quit',
                 'p to publish']
 
+    generate_uid()
     start_server()
     while True:
         print("\tMQTT RPI TEST MENU")
@@ -51,7 +56,7 @@ def menu():
             return
         elif choice is 'p':
             msg = input("Enter message:\n")
-            send_message(msg, uid)
+            send_message(msg, config.uid)
     return
 
 if __name__ == "__main__":
