@@ -7,10 +7,11 @@ def move_stepper(steps):
     GPIO.output(config.out2,GPIO.LOW)
     GPIO.output(config.out3,GPIO.LOW)
     GPIO.output(config.out4,GPIO.LOW)
-    x = steps
+    x = int(steps)
     positive = 0
     negative = 0
     y = 0
+    i = 0
     if x>0 and x<=400:
         for y in range(x,0,-1):
             if negative==1:
