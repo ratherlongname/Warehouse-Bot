@@ -6,7 +6,8 @@ if __name__ == "__main__":
                 'r to become rpi',
                 's to become server',
                 'g to test routing',
-                'p to test ping sensor']
+                'p to test ping sensor',
+                'e to test stepper']
     while True:
         print("\tMAIN MENU")
         for option in main_menu:
@@ -36,3 +37,6 @@ if __name__ == "__main__":
         elif choice is 'p':
             import ping
             ping.menu()
+        elif choice is 'e':
+            import stepper
+            stepper.menu()
