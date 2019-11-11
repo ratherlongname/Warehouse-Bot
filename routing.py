@@ -10,14 +10,16 @@ class AStarGraph(object):
         self.barriers, self.x_max, self.y_max = self.read_map_file(warehouse_map)
         # list of tuples (x, y) co-ordinates of points that are blocked eg. [(2,4), (2,5)]
 
-    def add_barrier(self, x, y):
+    def add_barrier(self, xy):
+        x, y = xy
         if x < 0 or x > self.x_max or y < 0 or y > self.y_max:
             raise ValueError("Barrier co-ordinates are outside map")
         elif (x, y) not in self.barriers:
             self.barriers.append((x, y))
         return
     
-    def remove_barrier(self, x, y):
+    def remove_barrier(self, xy):
+        x, y = xy
         if x < 0 or x > self.x_max or y < 0 or y > self.y_max:
             raise ValueError("Barrier co-ordinates are outside map")
         elif (x, y) in self.barriers:
@@ -163,11 +165,11 @@ def menu():
         elif choice is 'a':
             print("Enter barrier point to add (x,y):")
             barrier = tuple([int(x) for x in input().split(',')])
-            graph.add_barrier(barrier[0], barrier[1])
+            graph.add_barrier(barrier)
         elif choice is 'r':
             print("Enter barrier point to remove (x,y):")
             barrier = tuple([int(x) for x in input().split(',')])
-            graph.remove_barrier(barrier[0], barrier[1])
+            graph.remove_barrier(barrier)
         elif choice is 's':
             graph.print_map()
     return
