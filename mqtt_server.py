@@ -5,6 +5,7 @@ import config
 def on_connect(client, userdata, flags, rc):
 	print("Connected with result code "+str(rc))
 	client.subscribe(config.MQTT_CHANNEL_GET + "+")
+	client.subscribe(config.MQTT_CHANNEL_BARRIER)
 	return
 
 def on_message(client, userdata, msg):
