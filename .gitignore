@@ -123,3 +123,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Created by https://www.gitignore.io/api/code
+# Edit at https://www.gitignore.io/?templates=code
+
+### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# End of https://www.gitignore.io/api/code
