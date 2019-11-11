@@ -3,10 +3,10 @@ import time
 import config
 
 def move_stepper(steps):
-    GPIO.output(config.out1,GPIO.LOW)
-    GPIO.output(config.out2,GPIO.LOW)
-    GPIO.output(config.out3,GPIO.LOW)
-    GPIO.output(config.out4,GPIO.LOW)
+    GPIO.output(config.out1,GPIO.HIGH)
+    GPIO.output(config.out2,GPIO.HIGH)
+    GPIO.output(config.out3,GPIO.HIGH)
+    GPIO.output(config.out4,GPIO.HIGH)
     x = int(steps)
     positive = 0
     negative = 0
