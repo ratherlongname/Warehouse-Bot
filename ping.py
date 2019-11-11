@@ -27,6 +27,16 @@ def get_distance():
     distance = ping_time_to_distance(ping_time)
     return distance
 
+def get_distance_stream():
+    try:
+        while True:
+            distance_in_cm = get_distance()
+            print ("Measured distance = %.1f cm" % distance_in_cm)
+            time.sleep(config.DIST_CHECK_DELAY)
+    except KeyboardInterrupt:
+        pass
+    return
+
 def setup_ping_sensor():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(config.TRIGGER, GPIO.OUT)
@@ -36,7 +46,8 @@ def setup_ping_sensor():
 def menu():
     try:
         main_menu = ['q to quit',
-                    'd to get distance']
+                    'd to get distance',
+                    's to get distance stream']
         setup_ping_sensor()
         while True:
             print("\tPING SENSOR TEST MENU")
@@ -49,6 +60,8 @@ def menu():
             elif choice is 'd':
                 distance_in_cm = get_distance()
                 print ("Measured distance = %.1f cm" % distance_in_cm)
+            elif choice is 's':
+                get_distance_stream()
     finally:
         GPIO.cleanup()
     return
