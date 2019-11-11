@@ -14,9 +14,9 @@ def on_message(client, userdata, msg):
 
 client = mqtt.Client()
 
-def start_server():
+def start_server(on_message_func = on_message):
 	client.on_connect = on_connect
-	client.on_message = on_message
+	client.on_message = on_message_func
 	client.connect(config.MQTT_SERVER, 1883, 60)
 
 	client.loop_start()
