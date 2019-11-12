@@ -1,6 +1,5 @@
 def message_to_coordinates(message):
-    # TODO
-    return (0, 0)
+    return graph.qr_loc_map[message]
 
 def get_direction(curr_loc, next_loc):
     x_curr, y_curr = curr_loc

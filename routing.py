@@ -8,7 +8,7 @@ class AStarGraph(object):
     def __init__(self, warehouse_map):
         if warehouse_map is '':
             warehouse_map = "warehouse_map"
-        self.barriers, self.x_max, self.y_max = self.read_map_file(
+        self.qr_loc_map, self.barriers, self.x_max, self.y_max = self.read_map_file(
             warehouse_map)
         # list of tuples (x, y) co-ordinates of points that are blocked eg. [(2,4), (2,5)]
 
@@ -39,11 +39,14 @@ class AStarGraph(object):
         for line in map_data:
             line.pop(0)
         barriers = []
+        qr_loc_map = {}
         for y, line in enumerate(map_data):
             for x, node in enumerate(line):
-                if node is 'N':
+                if node == '-1':
                     barriers.append((x, y))
-        return barriers, x_max, y_max
+                else:
+                    qr_loc_map[node] = (x,y)
+        return qr_loc_map, barriers, x_max, y_max
 
     def heuristic(self, start, goal):
         # Use Manhattan distance heuristic
@@ -76,6 +79,11 @@ class AStarGraph(object):
         plt.show()
         return
 
+    def print_qr_loc_map(self):
+        print("QR\tCoordinates")
+        for qr in self.qr_loc_map:
+            print("{}\t{}".format(qr, self.qr_loc_map[qr]))
+        return
 
 def AStarSearch(start, end, graph):
 
@@ -148,7 +156,8 @@ def menu():
                  'g to go from a to b',
                  'a to add barrier',
                  'r to remove barrier',
-                 's to show map']
+                 's to show map',
+                 'm to print qr to location map']
     map_filename = input(
         "Give filename of warehouse map (default=warehouse_map):\n")
     graph = AStarGraph(map_filename)
@@ -180,6 +189,8 @@ def menu():
             graph.remove_barrier(barrier)
         elif choice is 's':
             graph.print_map()
+        elif choice is 'm':
+            graph.print_qr_loc_map()
     return
 
 
