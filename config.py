@@ -46,5 +46,5 @@ out1 = 32
 out2 = 31
 out3 = 33
 out4 = 29
-up_steps = 100
-down_steps = -100
+up_steps = -100
+down_steps = 100
