@@ -94,7 +94,32 @@ def server_message_handler(client, userdata, msg):
                 all_rpis[uid]['drop'] = locs[1]
                 send_next_command(uid, curr_loc)
         else:
+
             send_next_command(uid, curr_loc)
+
+#            graph.remove_barrier(all_rpis[uid]['loc'])
+#            graph.add_barrier(curr_loc)
+#            all_rpis[uid]['loc'] = curr_loc
+#            if all_rpis[uid]['pick'] is not (-1, -1):
+#                if curr_loc is all_rpis[uid]['pick']:
+#                    # at pick loc
+#                    # send msg to pickup
+#                    # start going to drop
+#                    all_rpis[uid]['pick'] = (-1, -1)
+#                    
+#                    import mqtt_server
+#                    mqtt_server.send_message("up", uid)
+#                    time.sleep(3)
+#                    all_rpis[uid]['stepper'] = "up"
+#
+#                    import routing
+#                    route, cost = routing.AStarSearch(curr_loc, all_rpis[uid]['drop'], graph)
+#                    
+#                else:
+#                    # go to pickup
+#                    pass
+#            elif all_rpis[uid]['drop'] is not (-1, -1):
+#                # go to drop
     return
 
 def start_server():
