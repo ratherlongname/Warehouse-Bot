@@ -20,10 +20,14 @@ def send_next_command(uid, curr_loc):
     import time
     import routing
     graph.remove_barrier(all_rpis[uid]['loc'])
+    print("remove barrier from {}".format(all_rpis[uid]['loc']))
     graph.add_barrier(curr_loc)
+    print("add barrier at {}".format(curr_loc))
     all_rpis[uid]['loc'] = curr_loc
-    if all_rpis[uid]['pick'] is not (-1, -1):
-        if curr_loc is all_rpis[uid]['pick']:
+    if all_rpis[uid]['pick'] != (-1, -1):
+        print("pick is not -1 -1")
+        if curr_loc == all_rpis[uid]['pick']:
+            print("curr loc is pick loc")
             # at pick loc
             # send msg to pickup
             # start going to drop
@@ -40,6 +44,7 @@ def send_next_command(uid, curr_loc):
             mqtt_server.send_message(command, uid)
 
         else:
+            print("curr loc is not pick loc")
             # go to pickup
             route, _ = routing.AStarSearch(curr_loc, all_rpis[uid]['pick'], graph)
             next_loc = route[1]
@@ -47,8 +52,10 @@ def send_next_command(uid, curr_loc):
             command = get_direction(curr_loc, next_loc)
             mqtt_server.send_message(command, uid)
 
-    elif all_rpis[uid]['drop'] is not (-1, -1):
-        if curr_loc is all_rpis[uid]['drop']:
+    elif all_rpis[uid]['drop'] != (-1, -1):
+        print("drop is not -1 -1")
+        if curr_loc == all_rpis[uid]['drop']:
+            print("curr loc is drop loc")
             # at drop loc
             # send msg to drop
             all_rpis[uid]['drop'] = (-1, -1)
@@ -64,6 +71,7 @@ def send_next_command(uid, curr_loc):
                 send_next_command(uid, curr_loc)
 
         else:
+            print("curr loc is not drop loc")
             # go to drop
             route, _ = routing.AStarSearch(curr_loc, all_rpis[uid]['drop'], graph)
             next_loc = route[1]
@@ -72,27 +80,32 @@ def send_next_command(uid, curr_loc):
             mqtt_server.send_message(command, uid)
 
 def server_message_handler(client, userdata, msg):
-    # TODO
-    message = str(msg.payload)
+    message = msg.payload.decode('latin-1')
     channel = msg.topic.split('/')
-    if channel[0] is "block":
+    print("received {} on channel {}".format(message, channel))
+
+    if channel[0] == "block":
         graph.add_barrier(message_to_coordinates(message))
-    elif channel[0] is "rpi":
+    elif channel[0] == "rpi":
+        print("ab idhar")
         curr_loc = message_to_coordinates(message)
-        uid = msg.topic.split('/')[2]
+        uid = channel[2]
         print("UID: {}, Message: {}".format(uid, message))
         if uid not in all_rpis:
+            print("new rpi")
             graph.add_barrier(curr_loc)
             all_rpis[uid] = {'loc':curr_loc,
                             'pick':(-1, -1),
                             'drop':(-1, -1),
                             'stepper':'down'}
+            print("added new rpi")
             if all_tasks:
                 locs = all_tasks.pop(0)
                 all_rpis[uid]['pick'] = locs[0]
                 all_rpis[uid]['drop'] = locs[1]
                 send_next_command(uid, curr_loc)
         else:
+            print("existing rpi")
             send_next_command(uid, curr_loc)
     return
 
@@ -108,6 +121,10 @@ def read_warehouse_map():
     graph = routing.AStarGraph(map_filename)
     return
 
+def print_all_rpis():
+    for uid in all_rpis:
+        print("uid {}: {}".format(uid, all_rpis[uid]))
+
 def menu():
     import routing
     main_menu = ['q to quit',
@@ -115,7 +132,8 @@ def menu():
                 'g to take stuff from a to b',
                 'a to add barrier',
                 'r to remove barrier',
-                't to print current task queue']
+                't to print current task queue',
+                'i to see all rpis']
     while True:
         print("\tWAREHOUSE SOFTWARE MENU")
         for option in main_menu:
@@ -136,12 +154,17 @@ def menu():
             routing.draw_route(graph, result)
             is_allocated = False
             for uid in all_rpis:
-                if all_rpis[uid]['pick'] is (-1, -1) and all_rpis[uid]['drop'] is (-1, -1):
+                print("checking uid {}".format(uid))
+                if all_rpis[uid]['pick'] == (-1, -1) and all_rpis[uid]['drop'] == (-1, -1):
                     is_allocated = True
                     all_rpis[uid]['pick'] = pick_loc
                     all_rpis[uid]['drop'] = drop_loc
+                    print("allocated")
+                    send_next_command(uid, all_rpis[uid]['loc'])
                     break
-            if not is_allocated:
+            if is_allocated:
+                pass
+            else:
                 all_tasks.append([pick_loc, drop_loc])
                 print("No rpi free right now, task added to queue")
         elif choice is 'a':
@@ -159,6 +182,8 @@ def menu():
                     print("{}.\t{}\t{}".format(i+1, locs[0], locs[1]))
             else:
                 print("Task queue empty...")
+        elif choice is 'i':
+            print_all_rpis()
     return
 
 def run_server():
