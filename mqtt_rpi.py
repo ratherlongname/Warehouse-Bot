@@ -31,6 +31,11 @@ def send_message(msg):
 	print("Sending message: {} to channel {}".format(msg, channel))
 	publish.single(channel, msg, hostname=config.MQTT_SERVER)
 
+def send_barrier(msg):
+	channel = config.MQTT_CHANNEL_BARRIER
+	print("Sending message: {} to channel {}".format(msg, channel))
+	publish.single(channel, msg, hostname=config.MQTT_SERVER)
+
 def menu():
 	main_menu = ['q to quit',
 				'p to publish']

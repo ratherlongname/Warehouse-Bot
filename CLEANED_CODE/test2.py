@@ -15,16 +15,20 @@ def solve(gray):
 
 def save(uid, size=50):
     aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50) # pylint: disable=no-member
-    img = aruco.drawMarker(aruco_dict, uid, size) # pylint: disable=no-member
-    ch3 = np.empty((size, size, 3), dtype=np.uint8)
-    ch3[:, :, 0] = img
-    ch3[:, :, 1] = img
-    ch3[:, :, 2] = 255
-    solve(ch3)
-    # cv2.imwrite("test_marker.jpg", img)
-    cv2.imshow('frame', ch3)
-    cv2.waitKey(0)
+    img = aruco.drawMarker(aruco_dict, uid, size)  # pylint: disable=no-member
+    k = np.full((100, 100), 255, np.uint8)
+    k[25:75, 25:75] = img
+    # ch3 = np.empty((size, size, 3), dtype=np.uint8)
+    # ch3[:, :, 0] = img
+    # ch3[:, :, 1] = img
+    # ch3[:, :, 2] = 255
+    # solve(img)
+    cv2.circle(k, (0,0), 5, 0, -1)
+    cv2.imwrite(f"{uid}.jpg", k)
+    # cv2.imshow('aruco', k)
+    # cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
-save(0, 500)
+for i in range(50):
+    save(i, 50)
+# save(0,50)

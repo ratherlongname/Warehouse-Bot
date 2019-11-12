@@ -10,6 +10,22 @@ class AStarGraph(object):
         self.barriers, self.x_max, self.y_max = self.read_map_file(warehouse_map)
         # list of tuples (x, y) co-ordinates of points that are blocked eg. [(2,4), (2,5)]
 
+    def add_barrier(self, xy):
+        x, y = xy
+        if x < 0 or x > self.x_max or y < 0 or y > self.y_max:
+            raise ValueError("Barrier co-ordinates are outside map")
+        elif (x, y) not in self.barriers:
+            self.barriers.append((x, y))
+        return
+    
+    def remove_barrier(self, xy):
+        x, y = xy
+        if x < 0 or x > self.x_max or y < 0 or y > self.y_max:
+            raise ValueError("Barrier co-ordinates are outside map")
+        elif (x, y) in self.barriers:
+            self.barriers.remove((x, y))
+        return
+
     def read_map_file(self, warehouse_map):
         with open(warehouse_map, 'r') as map_file:
             raw_map_data = map_file.readlines()
@@ -49,6 +65,13 @@ class AStarGraph(object):
         if b in self.barriers:
             return 100 #Extremely high cost to enter barrier squares
         return 1 #Normal movement cost
+
+    def print_map(self):
+        plt.plot([v[0] for v in self.barriers], [v[1] for v in self.barriers], 'ro')
+        plt.xlim(-1, self.x_max+1)
+        plt.ylim(self.y_max+1, -1)
+        plt.show()
+        return
 
 def AStarSearch(start, end, graph):
 
@@ -105,9 +128,20 @@ def AStarSearch(start, end, graph):
 
     raise RuntimeError("A* failed to find a solution")
 
+def draw_route(graph, route):
+    plt.plot([v[0] for v in route], [v[1] for v in route])
+    plt.plot([v[0] for v in graph.barriers], [v[1] for v in graph.barriers], 'ro')
+    plt.xlim(-1, graph.x_max+1)
+    plt.ylim(graph.y_max+1, -1)
+    plt.show()
+    return
+
 def menu():
     main_menu = ['q to quit',
-                'g to go from a to b']
+                'g to go from a to b',
+                'a to add barrier',
+                'r to remove barrier',
+                's to show map']
     map_filename = input("Give filename of warehouse map (default=warehouse_map):\n")
     graph = AStarGraph(map_filename)
 
@@ -127,11 +161,17 @@ def menu():
             end = tuple([int(x) for x in input().split(',')])
             result, cost = AStarSearch(start, end, graph)
             print ("Route: {}\nCost: {}".format(result, cost))
-            plt.plot([v[0] for v in result], [v[1] for v in result])
-            plt.plot([v[0] for v in graph.barriers], [v[1] for v in graph.barriers], 'ro')
-            plt.xlim(-1, graph.x_max+1)
-            plt.ylim(graph.y_max+1, -1)
-            plt.show()
+            draw_route(graph, result)
+        elif choice is 'a':
+            print("Enter barrier point to add (x,y):")
+            barrier = tuple([int(x) for x in input().split(',')])
+            graph.add_barrier(barrier)
+        elif choice is 'r':
+            print("Enter barrier point to remove (x,y):")
+            barrier = tuple([int(x) for x in input().split(',')])
+            graph.remove_barrier(barrier)
+        elif choice is 's':
+            graph.print_map()
     return
 
 if __name__=="__main__":
