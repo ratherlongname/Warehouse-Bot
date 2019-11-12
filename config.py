@@ -1,7 +1,9 @@
-RL1 = 11
-RL2 = 12
-RL3 = 15
-RL4 = 16
+RL1 = 17
+RL2 = 18
+RL3 = 22
+RL4 = 23
+ena=25
+enb=27
 
 ECHO = 24
 TRIGGER = 18

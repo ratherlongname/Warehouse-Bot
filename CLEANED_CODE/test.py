@@ -1,19 +1,21 @@
 import cv2
 from helpers import taninv
 # import numpy as np
-from qr import marker_solve
+from marker import marker_solve
 
 METHOD = 'aruco'  # or 'qr'
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+   #  cap = cv2.VideoCapture(0, )
+    cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 768)
     cap.set(cv2.CAP_PROP_FPS, 30)
     cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
     cv2.namedWindow("qr", cv2.WINDOW_NORMAL)
     cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
-
+    if not cap.isOpened():
+        print("NOT CAPTURING")
     while cap.isOpened():
         ret, frame = cap.read()
         frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -25,7 +27,7 @@ if __name__ == "__main__":
             cv2.destroyAllWindows()
             raise Exception("Could not grab frame")
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            retval = marker_solve(gray)
+        retval = marker_solve(gray)
         if retval is not None:
             top = retval[1]
             center = retval[2]

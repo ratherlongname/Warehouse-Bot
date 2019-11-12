@@ -2,13 +2,24 @@ import config
 import time
 import RPi.GPIO as GPIO
 
-
-def setup_motors():
-	GPIO.setmode(GPIO.BOARD)
+def setup_motor():
+	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(config.RL1, GPIO.OUT)
 	GPIO.setup(config.RL2, GPIO.OUT)
 	GPIO.setup(config.RL3, GPIO.OUT)
 	GPIO.setup(config.RL4, GPIO.OUT)
+	GPIO.setup(config.ena, GPIO.OUT)
+	GPIO.setup(config.enb, GPIO.OUT)
+	GPIO.output(config.RL1, GPIO.LOW)
+	GPIO.output(config.RL2, GPIO.LOW)
+	GPIO.output(config.RL3, GPIO.LOW)
+	GPIO.output(config.RL4, GPIO.LOW)
+	global pa
+	pa=GPIO.PWM(config.ena, 1000)
+	global pb
+	pb=GPIO.PWM(config.enb, 1000)
+	pb.start(60)
+	pa.start(50)
 
 
 def start_fw():
@@ -16,20 +27,24 @@ def start_fw():
 	GPIO.output(config.RL2, GPIO.LOW)
 	GPIO.output(config.RL3, GPIO.HIGH)
 	GPIO.output(config.RL4, GPIO.LOW)
-
+	pa.ChangeDutyCycle(50)
+	pb.ChangeDutyCycle(60)
 
 def start_bw():
 	GPIO.output(config.RL1, GPIO.LOW)
 	GPIO.output(config.RL2, GPIO.HIGH)
 	GPIO.output(config.RL3, GPIO.LOW)
 	GPIO.output(config.RL4, GPIO.HIGH)
-
+	pa.ChangeDutyCycle(50)
+	pb.ChangeDutyCycle(60)
 
 def start_left():
 	GPIO.output(config.RL1, GPIO.LOW)
 	GPIO.output(config.RL2, GPIO.HIGH)
 	GPIO.output(config.RL3, GPIO.HIGH)
 	GPIO.output(config.RL4, GPIO.LOW)
+	pa.ChangeDutyCycle(90)
+	pb.ChangeDutyCycle(90)
 
 
 def start_right():
@@ -37,7 +52,8 @@ def start_right():
 	GPIO.output(config.RL2, GPIO.LOW)
 	GPIO.output(config.RL3, GPIO.LOW)
 	GPIO.output(config.RL4, GPIO.HIGH)
-
+	pa.ChangeDutyCycle(90)
+	pb.ChangeDutyCycle(90)
 
 def stop():
 	GPIO.output(config.RL1, GPIO.LOW)
@@ -68,7 +84,7 @@ def menu():
 					 'l to turn left',
 					 'r to turn right',
 					 's to stop']
-		setup_motors()
+		setup_motor()
 		while True:
 			print("\tMOTOR TEST MENU")
 			print("enter direction and duration (optional)")
@@ -79,7 +95,7 @@ def menu():
 			choice = input()
 			try:
 				direction, duration = choice.split()
-				duration = int(duration)
+				duration = float(duration)
 				drive(direction, duration)
 			except ValueError:
 				if choice == 'q':
