@@ -168,7 +168,7 @@ def platform_up():
     return
 
 def setup_stepper():
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
     GPIO.setup(config.out1,GPIO.OUT)
     GPIO.setup(config.out2,GPIO.OUT)
     GPIO.setup(config.out3,GPIO.OUT)

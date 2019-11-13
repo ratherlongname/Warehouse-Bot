@@ -1,19 +1,19 @@
 # PINOUT VARS
-RL1 = 11
-RL2 = 12
-RL3 = 15
-RL4 = 16
+RL1 = 17
+RL2 = 18
+RL3 = 22
+RL4 = 23
 ena = 25
 enb = 27
-TRIGGER = 18
-ECHO = 24
+TRIGGER = 24
+ECHO = 8
 # UID OF BOT
 UID = "123"
 ##########################################
 # MOTOR VARS
 ANGLE_TOLERANCE = 10
 DELAY_PER_UNIT = 5
-DELAY_PER_ANGLE = 0.1
+DELAY_PER_ANGLE = 0.0105
 # PING SENSOR VARS
 MIN_DIST = 5  # in cm
 DIST_CHECK_DELAY = 1  # in sec
@@ -42,9 +42,9 @@ ANGLES = {"FORWARD": 135, "BACKWARD": -45, "LEFT": -135, "RIGHT": 45,
 # UNKNOWN(-1)=??
 ###########################################
 # STEPPER
-out1 = 32
-out2 = 31
-out3 = 33
-out4 = 29
+out1 = 12
+out2 = 6
+out3 = 13
+out4 = 5
 up_steps = -100
 down_steps = 100

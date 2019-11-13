@@ -13,7 +13,7 @@ def marker_solve(gray):
 
 def setup_webcam():
     ''' returns cap object '''
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(0)#, cv2.CAP_DSHOW)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 768)
     cap.set(cv2.CAP_PROP_FPS, 30)
@@ -61,13 +61,13 @@ def aruco_solve(gray):
     aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50)  # pylint: disable=no-member
     parameters = aruco.DetectorParameters_create()  # pylint: disable=no-member
     corners, ids, _ = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)  # pylint: disable=no-member
-    if corners is not None and len(corners) !=0:
-        print(corners)
+#    if corners is not None and len(corners) !=0:
+#        print(corners)
     # print(corners, ids, rejectedImgPoints)
     if ids is not None and len(ids[0]) == 1:
         corners = corners[0][0]
         ids = ids[0][0]
-        print(ids, corners)
+        #print(ids, corners)
 
         x, y = 0, 0
         for i in corners:

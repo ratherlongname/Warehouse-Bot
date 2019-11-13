@@ -3,7 +3,7 @@ import config
 import RPi.GPIO as GPIO  # pylint: disable=import-error,no-name-in-module
 
 
-def setup_motors():
+def setup_motor():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(config.RL1, GPIO.OUT)
     GPIO.setup(config.RL2, GPIO.OUT)
@@ -67,7 +67,7 @@ def stop():
 
 
 def drive(direction, duration):
-    setup_motors()
+    #setup_motors()
     if direction in ['F', 'FORWARD', 0]:
         start_fw()
     elif direction in ['B', 'BACKWARD', 1]:
@@ -82,19 +82,19 @@ def drive(direction, duration):
 
 def menu():
     try:
-        main_menu = ['q to quit',
-                     'f to go FW',
-                     'b to go BW',
-                     'l to turn left',
-                     'r to turn right',
-                     's to stop']
+        main_menu = ['Q to quit',
+                     'F to go FW',
+                     'B to go BW',
+                     'L to turn left',
+                     'R to turn right',
+                     'S to stop']
         setup_motor()
         while True:
             print("\tMOTOR TEST MENU")
             print("enter direction and duration (optional)")
             for option in main_menu:
                 print(option)
-            print("Example:f (start going fw), f 2 (go fw for 2 sec), l 0.5 (turn left for 0.5 sec), s (stop moving) etc. ")
+            print("Example:f (start going fw), F 2 (go fw for 2 sec), L 0.5 (turn left for 0.5 sec), S (stop moving) etc. ")
 
             choice = input()
             try:
@@ -102,17 +102,17 @@ def menu():
                 duration = float(duration)
                 drive(direction, duration)
             except ValueError:
-                if choice == 'q':
+                if choice == 'Q':
                     return
-                elif choice == 'f':
+                elif choice == 'F':
                     start_fw()
-                elif choice == 'b':
+                elif choice == 'B':
                     start_bw()
-                elif choice == 'l':
+                elif choice == 'L':
                     start_left()
-                elif choice == 'r':
+                elif choice == 'R':
                     start_right()
-                elif choice == 's':
+                elif choice == 'S':
                     stop()
     finally:
         GPIO.cleanup()

@@ -32,18 +32,18 @@ def get_nearest_direction(direction):
         if temp < mini:
             mini = temp
             pos = i
-    rot = (direction - config.ANGLES[i]) % 360
+    rot = (direction - config.ANGLES[pos]) % 360
     if rot > 180:
-        return pos, 2, 360-rot
-    return pos, 3, rot
+        return pos, 3, 360-rot
+    return pos, 2, rot
 
 
 def get_rotation_info(old_direction, new_direction):
     ''' returns 2/3 for L/R, angle_difference '''
     rot = (new_direction - old_direction) % 360
     if rot > 180:
-        return 2, 360-rot
-    return 3, rot
+        return 3, 360-rot
+    return 2, rot
 
 
 def get_direction_from_name(direction_name):
@@ -54,7 +54,8 @@ def get_direction_from_name(direction_name):
 
     returns integer [0,3]
     '''
-    direction_name = direction_name.upper()
+    if isinstance(direction_name, str):
+        direction_name = direction_name.upper()
     if direction_name in ["FORWARD", "F", 0]:
         return 0
     if direction_name in ["BACKWARD", "B", 1]:

@@ -25,7 +25,7 @@ def get_ping_time():
 
 
 def setup_ping_sensor():
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
     GPIO.setup(config.TRIGGER, GPIO.OUT)
     GPIO.setup(config.ECHO, GPIO.IN)
 
@@ -47,13 +47,6 @@ def get_distance_stream():
             time.sleep(config.DIST_CHECK_DELAY)
     except KeyboardInterrupt:
         pass
-    return
-
-
-def setup_ping_sensor():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(config.TRIGGER, GPIO.OUT)
-    GPIO.setup(config.ECHO, GPIO.IN)
     return
 
 
