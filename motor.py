@@ -28,8 +28,8 @@ def start_fw():
     GPIO.output(config.RL2, GPIO.LOW)
     GPIO.output(config.RL3, GPIO.HIGH)
     GPIO.output(config.RL4, GPIO.LOW)
-    pa.ChangeDutyCycle(50)
-    pb.ChangeDutyCycle(60)
+    pa.ChangeDutyCycle(60)
+    pb.ChangeDutyCycle(70)
 
 
 def start_bw():
@@ -37,8 +37,8 @@ def start_bw():
     GPIO.output(config.RL2, GPIO.HIGH)
     GPIO.output(config.RL3, GPIO.LOW)
     GPIO.output(config.RL4, GPIO.HIGH)
-    pa.ChangeDutyCycle(50)
-    pb.ChangeDutyCycle(60)
+    pa.ChangeDutyCycle(60)
+    pb.ChangeDutyCycle(70)
 
 
 def start_left():
@@ -47,7 +47,7 @@ def start_left():
     GPIO.output(config.RL3, GPIO.HIGH)
     GPIO.output(config.RL4, GPIO.LOW)
     pa.ChangeDutyCycle(90)
-    pb.ChangeDutyCycle(90)
+    pb.ChangeDutyCycle(96)
 
 
 def start_right():
@@ -55,7 +55,7 @@ def start_right():
     GPIO.output(config.RL2, GPIO.LOW)
     GPIO.output(config.RL3, GPIO.LOW)
     GPIO.output(config.RL4, GPIO.HIGH)
-    pa.ChangeDutyCycle(90)
+    pa.ChangeDutyCycle(94)
     pb.ChangeDutyCycle(90)
 
 
@@ -65,6 +65,25 @@ def stop():
     GPIO.output(config.RL3, GPIO.LOW)
     GPIO.output(config.RL4, GPIO.LOW)
 
+
+def turn_left():
+    start_bw()
+    time.sleep(0.3)
+    start_left()
+    time.sleep(0.97)
+    start_fw()
+    time.sleep(0.3)
+    stop()
+
+
+def turn_right():
+    start_bw()
+    time.sleep(0.3)
+    start_right()
+    time.sleep(1.09)
+    start_fw()
+    time.sleep(0.2)
+    stop()
 
 def drive(direction, duration):
     #setup_motors()
@@ -109,9 +128,9 @@ def menu():
                 elif choice == 'B':
                     start_bw()
                 elif choice == 'L':
-                    start_left()
+                    turn_left()
                 elif choice == 'R':
-                    start_right()
+                    turn_right()
                 elif choice == 'S':
                     stop()
     finally:

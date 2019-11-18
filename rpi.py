@@ -1,4 +1,5 @@
 from time import sleep
+import time
 import logging
 
 from paho.mqtt import client as mqtt
@@ -10,6 +11,7 @@ import motor
 import mqtt_client as mc
 import ping
 import stepper
+
 
 cap = None
 
@@ -31,23 +33,34 @@ def orient_in_direction(frame, new_direction):
 
 def goto_next_marker():
     # DONE_TODO: goto new location
+    global cap
+    cap.release()
     logging.info("Inside goto_next_marker")
-    motor.start_fw()
+    #motor.start_fw()
+    motor.drive("F", 0.5)
     retval = None
+    cap = mk.setup_webcam()
     while retval is None:
-        sleep(10)
+        motor.drive("F", 0.1)
+        mk.get_frame(cap)
+        print("Chala", retval)
         retval = mk.marker_solve(mk.get_frame(cap))
-        if ping.get_distance() < config.MIN_DIST:
-            while ping.get_distance() < config.MIN_DIST:
-                motor.stop()
+        png = ping.get_distance()
+        print("PING", retval)
+        if png < config.MIN_DIST:
+            while png < config.MIN_DIST:
                 logging.info("Ping distance < %s", config.MIN_DIST)
+                cap.release()
                 sleep(2000)
+                cap =  mk.setup_webcam()
+                png = ping.get_distance()
+    return retval
 
 
-def orient_on_qr():
+def orient_on_qr(retval):
     # DONE_TODO: reorient itself
-    frame = mk.get_frame(cap)
-    retval = mk.marker_solve(frame)
+    #frame = mk.get_frame(cap)
+    #retval = mk.marker_solve(frame)
     if retval is None:
         raise Exception("Not standing on qr but orient_on_qr is called")
     _, top, center = retval
@@ -61,18 +74,21 @@ def orient_on_qr():
 
 
 def message_callback(client, userdata, message):
-    logging.info("Inside message_callback")
+    print("Inside message_callback", message.payload)
+    pl = message.payload.decode("latin-1")
     global cap  # pylint: disable=global-statement
     frame = mk.get_frame(cap)
-    if message.payload == "UP":
+    if pl == "UP":
+        print("UP")
         stepper.platform_up()
-    elif message.payload == "DOWN":
+    elif pl == "DOWN":
+        print("DOWN")
         stepper.platform_down()
     else:
-        orient_in_direction(frame, message.payload)
-        goto_next_marker()
-        orient_on_qr()
-        retval = mk.marker_solve(mk.get_frame(cap))
+        orient_in_direction(frame, pl)
+        retval = goto_next_marker()
+        orient_on_qr(retval)
+        #retval = mk.marker_solve(frame)
         if retval is None:
             raise Exception("No qr after orient_on_qr finished")
         mc.send_message(client, retval[0].decode("latin-1"))
@@ -80,7 +96,7 @@ def message_callback(client, userdata, message):
 
 def main():
     # motor
-    motor.setup_motors()
+    motor.setup_motor()
 
     # ping_Sensor
     ping.setup_ping_sensor()
@@ -96,9 +112,10 @@ def main():
     mc.start_mqtt(client, message_callback)
 
     # DONE_TODO: Initial orientation
-    orient_on_qr()
-    data, _, _ = mk.marker_solve(mk.get_frame(cap))
-    mc.send_message(client, data.decode("latin-1"))
+    stepper.setup_stepper()
+    retval = mk.marker_solve(mk.get_frame(cap))
+    orient_on_qr(retval)
+    mc.send_message(client, str(int(retval[0])))
     while True:
         sleep(10)
 

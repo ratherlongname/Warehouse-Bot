@@ -15,12 +15,12 @@ ANGLE_TOLERANCE = 10
 DELAY_PER_UNIT = 5
 DELAY_PER_ANGLE = 0.0105
 # PING SENSOR VARS
-MIN_DIST = 5  # in cm
+MIN_DIST = 15  # in cm
 DIST_CHECK_DELAY = 1  # in sec
 TIME_TO_DIST_MULTIPLIER = 17150  # to convert time(ms) to dist(cm)
 ##########################################
 # MQTT VARS
-MQTT_SERVER = "localhost"
+MQTT_SERVER = "192.168.43.142"
 MQTT_CHANNEL = "rpi/"
 MQTT_CHANNEL_GET = MQTT_CHANNEL + "get/"
 MQTT_CHANNEL_PUT = MQTT_CHANNEL + "put/"
